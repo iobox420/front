@@ -25,25 +25,27 @@ function QuestionOnTheMainApiComponent(props) {
 
   useEffect(() => {
 
+/*
     props.updatePostsThunk()
     // ожидаю увидеть в консоли данные из стейта, которые туда поместили с помощью props.updatePostsThunk()
     console.log('ожидаю увидеть список постов из стейта, которые там должны были оказатсья после запроса на апи',store.getState().mainPage.posts)
+*/
 
-    // fetch('http://localhost:4000/api/questions/all/1')
-    //   .then((res) => res.json())
-    //   .then(
-    //     (result) => {
-    //       setIsLoaded(true)
-    //       props.updateTestReducer(result)
-    //       setItems(store.getState().mainPage.posts)
-    //     },
-    //     // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
-    //     // чтобы не перехватывать исключения из ошибок в самих компонентах.
-    //     (error) => {
-    //       setIsLoaded(true)
-    //       setError(error)
-    //     }
-    //   )
+    fetch('http://localhost:4000/api/questions/all/1')
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          setIsLoaded(true)
+          props.updateTestReducer(result)
+          setItems(store.getState().mainPage.posts)
+        },
+        // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),
+        // чтобы не перехватывать исключения из ошибок в самих компонентах.
+        (error) => {
+          setIsLoaded(true)
+          setError(error)
+        }
+      )
 
   }, [])
 
