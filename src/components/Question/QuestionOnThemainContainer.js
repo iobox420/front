@@ -10,9 +10,9 @@ let mapStateToProps = (state) => {
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    /* updatePostsThunk: () => {
+     updatePostsThunk: () => {
       dispatch(getPostThunk())
-    },*/
+    },
     updateTestReducer: (data) => {
       dispatch(updatePostsMainPage(data))
     },

@@ -40,10 +40,25 @@ const mainPageReducer = (state = initialState, action) => {
     /*debugger*/
   }
 }
+export default mainPageReducer
 
 export const updatePostsMainPage = (data) => ({
   type: UPDATE_POSTS,
   data: data,
 })
 
-export default mainPageReducer
+export const getPostThunk = () => {
+  return (dispatch) => {
+    debugger
+    fetch('http://localhost:4000/api/questions/all/1')
+        .then((res) => res.json())
+        .then(
+            (result) => {
+              dispatch(updatePostsMainPage(result))
+            },
+            (error) => {
+              console.log('fetch error = ', error)
+            }
+        )
+  }
+}
