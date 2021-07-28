@@ -4,7 +4,6 @@ const addCommentTextBoxShowReducer = (state, action) => {
   let initialState = false
   switch (action.type) {
     case SET_COMMENT_TEXT_BOX_STATE: {
-      debugger
       if (state) {
         return false
       } else return true

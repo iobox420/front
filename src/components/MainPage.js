@@ -5,8 +5,9 @@ import Header from './Header'
 import SubHeader from './ssubHeader'
 import TextApi from './TextApiComponent'
 import { BrowserRouter, Route } from 'react-router-dom'
-import QuestionSingleApiComponent from './Question/QuestionSingleApiComponent'
-import QuestionOnTheMainContainer from "./Question/QuestionOnThemainContainer"
+import QuestionSingleApiComponent from './QuestionSingle/QuestionSingleApiComponent'
+import QuestionOnTheMainContainer from './QuestionOnMain/QuestionOnThemainContainer'
+import QuestionSingleContainer from './QuestionSingle/QuestionSingleContainer'
 
 const MainPage = (props) => {
   function RDM(min = 1, max = 10000) {
@@ -21,21 +22,23 @@ const MainPage = (props) => {
       <React.Fragment>
         <CssBaseline />
         <Container maxWidth="md">
-          <Header />
+          <Header
+            tokenAC={props.tokenAC}
+            auth={props.state.authorization}
+            token={props.token}
+            /*clearTokenAC={props.clearTokenAC}*/
+          />
           <SubHeader />
           <div className="app-wrapper-content">
             <Route
               exact
               path="/questions/:genreId"
-              render={() => <QuestionSingleApiComponent props={props} />}
+              render={() => <QuestionSingleContainer props={props} />}
             />
             <Route
               path="/all"
               render={() => (
-                <QuestionOnTheMainContainer
-                  props={props}
-                  api={'api/questions/all/'}
-                />
+                <QuestionOnTheMainContainer api={'api/questions/all/'} />
               )}
             />
             <Route

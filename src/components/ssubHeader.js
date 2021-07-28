@@ -42,7 +42,7 @@ export default function SubHeader() {
           <CardContent className={c.replyTopBlock}>
             <Typography className={c.question} variant="h6" component="h2">
               <NavLink
-                to="all"
+                to="/all"
                 activeClassName={c.activeLink}
                 className={c.Link}
               >

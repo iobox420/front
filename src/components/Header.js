@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
@@ -54,7 +54,13 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function ButtonAppBar() {
+export default function ButtonAppBar(props) {
+  useEffect(() => {
+    // Если в sessionStorage сохранен токен и его нет в стейте, то тогда диспатчим токен
+    if (sessionStorage.getItem('token') != null && props.token == null) {
+      props.tokenAC(JSON.parse(sessionStorage.getItem('token')))
+    }
+  }, [])
   let locState = {
     user_name: '',
     password: '',
@@ -70,7 +76,6 @@ export default function ButtonAppBar() {
   const c = useStyles()
   const [open, setOpen] = React.useState(false)
   const handleOpen = () => {
-    /*console.log(store.getState())*/
     setOpen(true)
   }
 
@@ -83,17 +88,16 @@ export default function ButtonAppBar() {
     try {
       const data = await login(locState.user_name, locState.password)
       history.push('/')
+      props.tokenAC(data)
       debugger
-      //сохраняем в стор наш токен и юзер дата
-      store.dispatch({ type: 'SET-TOKEN', data: data })
+      console.log(String(data))
+      sessionStorage.setItem('token', JSON.stringify(data))
+      console.log('sessionStorage = ', sessionStorage.getItem('token'))
+      console.log(
+        'sessionStorage = ',
+        JSON.parse(sessionStorage.getItem('token'))
+      )
       setOpen(false)
-
-      if (store.getIsAuth()) {
-        console.log('auth')
-      }
-
-      /*console.log(store.getState())*/
-      /*console.log(store.getToken())*/
     } catch (error) {
       console.error(error)
       console.log('Error logging in please try again')
@@ -101,10 +105,16 @@ export default function ButtonAppBar() {
   }
 
   let btn
-  if (store.getIsAuth()) {
-    console.log(store.getAvatarUrl())
-    console.log(store.getState())
-    btn = <Avatar alt="" src={store.getAvatarUrl()} className={c.avatar} />
+  if (props.auth.isAuth) {
+    btn = (
+      <div>
+        {' '}
+        <Avatar alt="" src={props.auth.avatarUrl} className={c.avatar} />
+        {/*        <Button color="inherit" onClick={props.clearTokenAC()}>
+          Выйти
+        </Button>*/}
+      </div>
+    )
   } else {
     /*console.log('auth false')*/
     btn = (

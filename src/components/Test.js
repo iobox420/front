@@ -17,7 +17,7 @@ function Test() {
       .then(
         (result) => {
           setIsLoaded(true)
-          debugger
+
           setItems(result)
         },
         // Примечание: важно обрабатывать ошибки именно здесь, а не в блоке catch(),

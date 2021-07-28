@@ -71,10 +71,8 @@ export default function Question(props) {
   /*console.log(props)*/
   const c = useStyles()
   /* const [count, setCount] = useState(0)*/
-  const toPost = (props) => {
-    debugger
-  }
-  debugger
+  const toPost = (props) => {}
+
   return (
     <Card className={c.root} /*onClick={toPost(props)}*/>
       {/*question*/}

@@ -173,7 +173,7 @@ const useStyles = makeStyles({
     __proto__: Object*/
 export default function Reply(props) {
   const c = useStyles()
-  debugger
+
   return (
     <div className={c.questionWrapper}>
       <div className={c.lineOneTagsAndData}>
@@ -219,7 +219,13 @@ export default function Reply(props) {
 
       <div className={c.lineFourLikeAndAvatarAndName}>
         <div className={c.likeBlock}>
-          <div className={c.likeBlock_LikeIcon}>
+          <div
+            className={c.likeBlock_LikeIcon}
+            onClick={() => {
+              console.log('click')
+              props.putLike(props.props._id_reply, 'REPLY')
+            }}
+          >
             <svg
               width="20"
               height="20"
@@ -233,7 +239,7 @@ export default function Reply(props) {
               />
             </svg>
           </div>
-          <div className={c.likeCount}>42</div>
+          <div className={c.likeCount}>{props.props.reply_likes_count}</div>
         </div>
         <button
           className={c.addCommentBlock}

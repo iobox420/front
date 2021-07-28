@@ -56,7 +56,7 @@ function QuestionApi(props) {
         // чтобы не перехватывать исключения из ошибок в самих компонентах.
         (error) => {
           console.log('error fetch')
-          debugger
+
           setIsLoaded(true)
           setError(error)
         }
@@ -69,14 +69,13 @@ function QuestionApi(props) {
   } else if (!isLoaded) {
     return <div>Загрузка...</div>
   } else {
-    debugger
     let questionResultJsx = items.post.map((currentPost, index, arr) => {
       return <Question key={index} props={currentPost} />
     })
     let replyResultJsx = items.replY.map((currentPost, index, arr) => {
       return <Reply key={index} props={currentPost} />
     })
-    debugger
+
     return replyResultJsx
   }
 }

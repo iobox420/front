@@ -1,4 +1,6 @@
 const UPDATE_POSTS = 'UPDATE-POSTS'
+const CLEAR_MAIN_PAGE_POSTS = 'CLEAR-MAIN-PAGE-POSTS'
+const LOADING_ERROR = 'LOADING-ERROR'
 
 let initialState = {
   posts: [
@@ -28,19 +30,24 @@ let initialState = {
   ],
 }
 
-const mainPageReducer = (state = initialState, action) => {
+const questionOnTheMainReducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_POSTS:
       return {
         ...state,
         posts: action.data,
       }
+    case CLEAR_MAIN_PAGE_POSTS:
+      return {
+        ...state,
+        posts: [],
+      }
     default:
       return state
-    /*debugger*/
+    /**/
   }
 }
-export default mainPageReducer
+export default questionOnTheMainReducer
 
 export const updatePostsMainPage = (data) => ({
   type: UPDATE_POSTS,
@@ -49,16 +56,55 @@ export const updatePostsMainPage = (data) => ({
 
 export const getPostThunk = () => {
   return (dispatch) => {
-    debugger
+    dispatch(clearMainPagePosts)
+    dispatch(loadingInProgress(false))
     fetch('http://localhost:4000/api/questions/all/1')
-        .then((res) => res.json())
-        .then(
-            (result) => {
-              dispatch(updatePostsMainPage(result))
-            },
-            (error) => {
-              console.log('fetch error = ', error)
-            }
-        )
+      .then((res) => res.json())
+      .then(
+        (result) => {
+          dispatch(loadingInProgress(true))
+          dispatch(updatePostsMainPage(result))
+        },
+        (error) => {
+          dispatch(loadingErrorAC(true))
+        }
+      )
   }
 }
+
+export const clearMainPagePosts = () => ({
+  type: 'CLEAR-MAIN-PAGE-POSTS',
+})
+
+export const loadingInProgress = (bool) => ({
+  type: 'LOADING_IN_PROGRESS',
+  isLoading: bool,
+})
+
+export const loadingQuestionOnTheMainReducer = (state = false, action) => {
+  switch (action.type) {
+    case 'LOADING_IN_PROGRESS':
+      return action.isLoading
+    default:
+      return state
+  }
+}
+
+export const loadingErrorAC = (bool) => ({
+  type: 'LOADING-ERROR',
+  hasErrored: bool,
+})
+
+export const loadingErrorReducer = (state = false, action) => {
+  switch (action.type) {
+    case 'LOADING_ERROR':
+      return action.hasErrored
+    default:
+      return state
+  }
+}
+
+export const loadingSuccess = (repos) => ({
+  type: 'LOADING-SUCCESS',
+  repos,
+})

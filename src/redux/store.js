@@ -1,8 +1,8 @@
-import mainPageReducer from './mainPageReducer'
+import questionOnTheMainReducer from './QuestionOnTheMainReducer'
 import tokenReducer from './tokenReducer'
 import questionPageReducer from './questionPageReducer'
 
-let store = {
+let storee = {
   _state: {
     mainPage: {
       /*      posts: [
@@ -64,7 +64,10 @@ let store = {
     this._callSubscriber = observer
   },
   dispatch(action) {
-    this._state.mainPage = mainPageReducer(this._state.mainPage, action)
+    this._state.mainPage = questionOnTheMainReducer(
+      this._state.mainPage,
+      action
+    )
     this._state.questionPage = questionPageReducer(
       this._state.questionPage,
       action
@@ -74,4 +77,4 @@ let store = {
   },
 }
 
-export default store
+export default storee

@@ -1,10 +1,12 @@
 import { connect } from 'react-redux'
-import { updatePostsMainPage } from '../redux/mainPageReducer'
+import { updatePostsMainPage } from '../redux/QuestionOnTheMainReducer'
 import MainPage from './MainPage'
+import { clearTokenAC, tokenAC } from '../redux/tokenReducer'
 
 let mapStateToProps = (state) => {
   return {
     state: state,
+    token: state.authorization.token,
   }
 }
 let mapDispatchToProps = (dispatch) => {
@@ -12,6 +14,12 @@ let mapDispatchToProps = (dispatch) => {
     updatePosts: (data) => {
       dispatch(updatePostsMainPage(data))
     },
+    tokenAC: (data) => {
+      dispatch(tokenAC(data))
+    },
+    /*    clearTokenAC: () => {
+      dispatch(clearTokenAC())
+    },*/
   }
 }
 

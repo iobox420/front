@@ -54,7 +54,7 @@ function NativeExReduxApiComponent(props) {
         // чтобы не перехватывать исключения из ошибок в самих компонентах.
         (error) => {
           console.log('error fetch')
-          debugger
+
           setIsLoaded(true)
           setError(error)
         }
@@ -67,7 +67,6 @@ function NativeExReduxApiComponent(props) {
   } else if (!isLoaded) {
     return <div>Загрузка...</div>
   } else {
-    debugger
     /*let questionResultJsx = items.post.map((currentPost, index, arr) => {
       return <NativeQuestion key={index} props={currentPost} />
     })*/
@@ -83,8 +82,6 @@ function NativeExReduxApiComponent(props) {
       })
       return replyResultJsx
     }
-
-    debugger
 
     return (
       <div>
