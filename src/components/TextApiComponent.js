@@ -23,7 +23,7 @@ function TextApi(props) {
     //Вызов fetch  с параметром  let uri = config.baseURL + props.api + '1'
     //приводит к зацикливанию fetch, поэтому захардкодим это место
     /*fetch(uri)*/
-    fetch('http://localhost:4000/api/questions/all/1')
+    fetch('http://${SERVER}/api/questions/all/1')
       .then((res) => res.json())
       .then(
         (result) => {

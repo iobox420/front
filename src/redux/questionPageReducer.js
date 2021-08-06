@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { getPostThunk } from './QuestionOnTheMainReducer'
+import { SERVER } from '../config'
 
 const UPDATE_CURRENT_POST = 'UPDATE-CURRENT-POST'
 const LOADING_SINGLE_QUESTION_IN_PROGRESS =
@@ -82,7 +83,7 @@ export const getSinglePostThunk = () => {
       dispatch(loadingSingleQuestion(false))
 
       fetch(
-        'http://localhost:4000/api/questions/questions_posts_with_auth/' +
+        `http://${SERVER}/api/questions/questions_posts_with_auth/` +
           argument[4],
         {
           method: 'GET',
@@ -107,9 +108,7 @@ export const getSinglePostThunk = () => {
       /*dispatch(clearSingleQuestionPosts)*/
       dispatch(selectQuestionAC(argument[4]))
       dispatch(loadingSingleQuestion(false))
-      fetch(
-        'http://localhost:4000/api/questions/questions_posts/' + argument[4]
-      )
+      fetch('http://${SERVER}/api/questions/questions_posts/' + argument[4])
         .then((res) => res.json())
         .then(
           (result) => {
@@ -135,7 +134,7 @@ export const getSinglePostThunkSimple = () => {
     let argument = String(uri).split('/')
     dispatch(selectQuestionAC(argument[4]))
     /*dispatch(loadingSingleQuestion(false))*/
-    fetch('http://localhost:4000/api/questions/questions_posts/' + argument[4])
+    fetch('http://${SERVER}/api/questions/questions_posts/' + argument[4])
       .then((res) => res.json())
       .then(
         (result) => {
@@ -256,7 +255,7 @@ export const sendCommentThunk = (text, id, type) => {
     } else {
       if (type === 'COMMENT-ON-REPLY') {
         fetch(
-          `http://localhost:4000/api/questions/questions_posts/add_comment_on_reply/${id}/${text}`,
+          `http://${SERVER}/api/questions/questions_posts/add_comment_on_reply/${id}/${text}`,
           {
             method: 'POST',
             headers: {
@@ -276,7 +275,7 @@ export const sendCommentThunk = (text, id, type) => {
       }
       if (type === 'REPLY-ON-QUESTION') {
         fetch(
-          `http://localhost:4000/api/questions/questions_posts/add/${id}/${text}`,
+          `http://${SERVER}/api/questions/questions_posts/add/${id}/${text}`,
           {
             method: 'POST',
             headers: {
@@ -319,7 +318,7 @@ export const putLikeThunk = (id, type) => {
         type == QUESTION &&
         state.questionSinglePage.post[0].isLike === null
       ) {
-        uri = `http://localhost:4000/api/questions/questions_posts/like/question/${id}`
+        uri = `http://${SERVER}/api/questions/questions_posts/like/question/${id}`
         fetch(uri, {
           method: 'POST',
           headers: {
@@ -341,7 +340,7 @@ export const putLikeThunk = (id, type) => {
         type == REPLY &&
         state.questionSinglePage.reply[index].isLike === null
       ) {
-        uri = `http://localhost:4000/api/questions/questions_posts/like/reply/${id}`
+        uri = `http://${SERVER}/api/questions/questions_posts/like/reply/${id}`
         fetch(uri, {
           method: 'POST',
           headers: {
@@ -363,7 +362,7 @@ export const putLikeThunk = (id, type) => {
         state.questionSinglePage.reply[index].isLike != null
       ) {
         fetch(
-          `http://localhost:4000/api/questions/questions_posts/removelike/reply/${id}`,
+          `http://${SERVER}/api/questions/questions_posts/removelike/reply/${id}`,
           {
             method: 'POST',
             headers: {
@@ -383,7 +382,7 @@ export const putLikeThunk = (id, type) => {
       }
       if (type == QUESTION && state.questionSinglePage.post[0].isLike != null) {
         fetch(
-          `http://localhost:4000/api/questions/questions_posts/removelike/question/${id}`,
+          `http://${SERVER}/api/questions/questions_posts/removelike/question/${id}`,
           {
             method: 'POST',
             headers: {
@@ -413,7 +412,7 @@ export const putLikeCommentThunk = (id, stateLike) => {
     if (!state.authorization.isAuth) {
       alert('Прежде чем поставить лайк, вам необходимо пройти авторизацию')
     } else if (stateLike == null) {
-      let uri = `http://localhost:4000/api/questions/questions_posts/like/comment/${id}`
+      let uri = `http://${SERVER}/api/questions/questions_posts/like/comment/${id}`
       fetch(uri, {
         method: 'POST',
         headers: {
@@ -431,7 +430,7 @@ export const putLikeCommentThunk = (id, stateLike) => {
         )
     }
     if (stateLike !== null) {
-      let uri = `http://localhost:4000/api/questions/questions_posts/removelike/comment/${id}`
+      let uri = `http://${SERVER}/api/questions/questions_posts/removelike/comment/${id}`
       fetch(uri, {
         method: 'POST',
         headers: {

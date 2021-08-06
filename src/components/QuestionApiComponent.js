@@ -40,8 +40,7 @@ function QuestionApi(props) {
     /*fetch(uri)*/
 
     /*let uri = 'http://localhost:4000/api/questions/all/1'*/
-    let uri =
-      'http://localhost:4000/api/questions/questions_posts/' + currentUrl
+    let uri = 'http://${SERVER}/api/questions/questions_posts/' + currentUrl
 
     fetch(uri)
       .then((res) => res.json())

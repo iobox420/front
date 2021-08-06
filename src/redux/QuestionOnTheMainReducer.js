@@ -1,4 +1,5 @@
 import { getSinglePostThunk } from './questionPageReducer'
+import { SERVER } from '../config'
 
 const UPDATE_POSTS = 'UPDATE-POSTS'
 const CLEAR_MAIN_PAGE_POSTS = 'CLEAR-MAIN-PAGE-POSTS'
@@ -62,7 +63,7 @@ export const getPostThunk = () => {
     dispatch(clearMainPagePosts)
     dispatch(loadingInProgress(false))
     if (state.authorization.isAuth) {
-      fetch('http://localhost:4000/api/questionswithauth/all/1', {
+      fetch(`http://${SERVER}/api/questionswithauth/all/1`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -80,7 +81,7 @@ export const getPostThunk = () => {
           }
         )
     } else {
-      fetch('http://localhost:4000/api/questions/all/1')
+      fetch('http://${SERVER}/api/questions/all/1')
         .then((res) => res.json())
         .then(
           (result) => {
@@ -139,7 +140,7 @@ export const putLikeQuestionOnMainThunk = (id, stateLike) => {
     if (!state.authorization.isAuth) {
       alert('Прежде чем поставить лайк, вам необходимо пройти авторизацию')
     } else if (stateLike == null) {
-      let uri = `http://localhost:4000/api/questions/questions_posts/like/question/${id}`
+      let uri = `http://${SERVER}/api/questions/questions_posts/like/question/${id}`
 
       fetch(uri, {
         method: 'POST',
@@ -158,7 +159,7 @@ export const putLikeQuestionOnMainThunk = (id, stateLike) => {
         )
     }
     if (stateLike !== null) {
-      let uri = `http://localhost:4000/api/questions/questions_posts/removelike/question/${id}`
+      let uri = `http://${SERVER}/api/questions/questions_posts/removelike/question/${id}`
 
       fetch(uri, {
         method: 'POST',
