@@ -81,7 +81,7 @@ export const getPostThunk = () => {
           }
         )
     } else {
-      fetch('http://${SERVER}/api/questions/all/1')
+      fetch(`http://${SERVER}/api/questions/all/1`)
         .then((res) => res.json())
         .then(
           (result) => {

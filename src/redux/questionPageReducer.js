@@ -108,7 +108,7 @@ export const getSinglePostThunk = () => {
       /*dispatch(clearSingleQuestionPosts)*/
       dispatch(selectQuestionAC(argument[4]))
       dispatch(loadingSingleQuestion(false))
-      fetch('http://${SERVER}/api/questions/questions_posts/' + argument[4])
+      fetch(`http://${SERVER}/api/questions/questions_posts/` + argument[4])
         .then((res) => res.json())
         .then(
           (result) => {
