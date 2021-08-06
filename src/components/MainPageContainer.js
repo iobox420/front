@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { updatePostsMainPage } from '../redux/QuestionOnTheMainReducer'
 import MainPage from './MainPage'
-import { clearTokenAC, tokenAC } from '../redux/tokenReducer'
+import { clearTokenAC, /*clearTokenAC,*/ tokenAC } from '../redux/tokenReducer'
 
 let mapStateToProps = (state) => {
   return {
@@ -17,9 +17,9 @@ let mapDispatchToProps = (dispatch) => {
     tokenAC: (data) => {
       dispatch(tokenAC(data))
     },
-    /*    clearTokenAC: () => {
+    clearTokenAC: () => {
       dispatch(clearTokenAC())
-    },*/
+    },
   }
 }
 

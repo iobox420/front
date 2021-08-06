@@ -2,6 +2,7 @@ import React from 'react'
 import QuestionSingle from './QuestionSingle'
 import { makeStyles } from '@material-ui/core/styles'
 import Reply from './Reply'
+import AddCommentTODOS from './AddTODOS'
 
 const { useEffect } = require('react')
 
@@ -9,6 +10,7 @@ const useStyles = makeStyles({
   mainWrapper: {
     margin: '20px 0 0 0',
   },
+  text: {},
 })
 
 export default function QuestionSingleApiComponent({
@@ -27,15 +29,24 @@ export default function QuestionSingleApiComponent({
   selectQuestion,
   token,
   putLike,
+  count,
+  countReducerAC,
+  isLikeQ,
+  isLikeR,
+  SingleQuestionAddCommentOnReplyTextFieldAC,
+  storeTextFieldAdd,
+  commentTextField,
+  putLikeComment,
 }) {
   const c = useStyles()
-
+  let n1 = 'exp1'
+  let n2 = 'exp2'
   // Примечание: пустой массив зависимостей [] означает, что
   // этот useEffect будет запущен один раз
   // аналогично componentDidMount()
 
   useEffect(() => {
-    updateSinglePostsThunk(document.location.href)
+    updateSinglePostsThunk()
   }, [])
 
   if (error) {
@@ -45,16 +56,10 @@ export default function QuestionSingleApiComponent({
   } else {
     return (
       <div className={c.mainWrapper}>
-        <button
-          type="button"
-          className="btn btn-primary"
-          onClick={() => console.log(state)}
-        >
-          state
-        </button>
         {post.map((currentPost, index, arr) => {
           return (
             <QuestionSingle
+              storeTextFieldAdd={storeTextFieldAdd}
               putLike={putLike}
               key={index}
               props={currentPost}
@@ -64,12 +69,30 @@ export default function QuestionSingleApiComponent({
               onChangeAddCommentTextFieldFunc={onChangeAddCommentTextFieldFunc}
               sendCommentThunk={sendCommentThunk}
               selectedQuestion={selectedQuestion}
+              isLikeQ={currentPost.isLike}
               token={token}
             />
           )
         })}
         {replys.map((currentPost, index, arr) => {
-          return <Reply key={index} props={currentPost} putLike={putLike} />
+          return (
+            <Reply
+              putLikeComment={putLikeComment}
+              sendCommentThunk={sendCommentThunk}
+              commentTextField={commentTextField}
+              storeTextFieldAdd={storeTextFieldAdd}
+              SingleQuestionAddCommentOnReplyTextFieldAC={
+                SingleQuestionAddCommentOnReplyTextFieldAC
+              }
+              i={index}
+              key={index}
+              props={currentPost}
+              onChangeAddCommentTextFieldFunc={onChangeAddCommentTextFieldFunc}
+              putLike={putLike}
+              isLikeR={isLikeR[index].isLike}
+              token={token}
+            />
+          )
         })}
       </div>
     )

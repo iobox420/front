@@ -1,10 +1,12 @@
-import questionPageReducer, {
+import {
   loadingSingleQuestionReducer,
   loadingSingleQuestionErrorReducer,
   addCommentButtonSingleQuestionReducer,
   onChangeAddCommentTextFieldReducer,
   sendCommentThunkReducer,
   selectQuestionReducer,
+  countReducer,
+  SingleQuestionAddCommentOnReplyTextFieldReducer,
 } from './questionPageReducer'
 import tokenReducer from './tokenReducer'
 import addCommentTextBoxShowReducer from './addCommentTextBoxShowReducer'
@@ -16,6 +18,7 @@ import questionOnTheMainReducer, {
   loadingQuestionOnTheMainReducer,
 } from './QuestionOnTheMainReducer'
 import SingleQuestionPageReducer from './questionPageReducer'
+import commentReducer from './commentReducer'
 
 let reducers = combineReducers({
   authorization: tokenReducer,
@@ -32,8 +35,11 @@ let reducers = combineReducers({
   SingleQuestion_addCommentTextBoxShow: addCommentTextBoxShowReducer,
   addCommentButtonSingleQuestion: addCommentButtonSingleQuestionReducer,
   onChangeAddCommentTextField: onChangeAddCommentTextFieldReducer,
-
   sendCommentThunk: sendCommentThunkReducer,
+
+  count: countReducer,
+
+  comment: commentReducer,
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

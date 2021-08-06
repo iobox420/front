@@ -3,6 +3,7 @@ import QuestionOnTheMainApiComponent from './QuestionOnTheMainApiComponent'
 import {
   getPostThunk,
   loadingInProgress,
+  putLikeQuestionOnMainThunk,
 } from '../../redux/QuestionOnTheMainReducer'
 import { selectQuestionAC } from '../../redux/questionPageReducer'
 
@@ -24,6 +25,9 @@ let mapDispatchToProps = (dispatch) => {
     },
     selectQuestion: (selectedQuestion) => {
       dispatch(selectQuestionAC(selectedQuestion))
+    },
+    putLikeQuestionOnMain: (id, stateLike) => {
+      dispatch(putLikeQuestionOnMainThunk(id, stateLike))
     },
   }
 }

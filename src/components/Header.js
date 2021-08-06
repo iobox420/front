@@ -11,7 +11,6 @@ import Backdrop from '@material-ui/core/Backdrop'
 import Fade from '@material-ui/core/Fade'
 import TextField from '@material-ui/core/TextField'
 import { login } from '../api'
-import store from '../redux/store'
 import { useHistory } from 'react-router-dom'
 import Avatar from '@material-ui/core/Avatar'
 
@@ -52,6 +51,9 @@ const useStyles = makeStyles((theme) => ({
   avatar: {
     background: 'azure',
   },
+  afterLogInBlock: {
+    display: 'flex',
+  },
 }))
 
 export default function ButtonAppBar(props) {
@@ -87,9 +89,9 @@ export default function ButtonAppBar(props) {
     event.preventDefault()
     try {
       const data = await login(locState.user_name, locState.password)
-      history.push('/')
+      /*history.push('/')*/
       props.tokenAC(data)
-      debugger
+
       console.log(String(data))
       sessionStorage.setItem('token', JSON.stringify(data))
       console.log('sessionStorage = ', sessionStorage.getItem('token'))
@@ -107,12 +109,18 @@ export default function ButtonAppBar(props) {
   let btn
   if (props.auth.isAuth) {
     btn = (
-      <div>
+      <div className={c.afterLogInBlock}>
         {' '}
-        <Avatar alt="" src={props.auth.avatarUrl} className={c.avatar} />
-        {/*        <Button color="inherit" onClick={props.clearTokenAC()}>
+        <Button
+          color="inherit"
+          onClick={() => {
+            sessionStorage.removeItem('token')
+            props.clearTokenAC()
+          }}
+        >
           Выйти
-        </Button>*/}
+        </Button>
+        <Avatar alt="" src={props.auth.avatarUrl} className={c.avatar} />
       </div>
     )
   } else {

@@ -26,7 +26,7 @@ const MainPage = (props) => {
             tokenAC={props.tokenAC}
             auth={props.state.authorization}
             token={props.token}
-            /*clearTokenAC={props.clearTokenAC}*/
+            clearTokenAC={props.clearTokenAC}
           />
           <SubHeader />
           <div className="app-wrapper-content">
@@ -43,26 +43,28 @@ const MainPage = (props) => {
             />
             <Route
               path="/bestofday"
-              render={() => <TextApi api={'api/questions/bestof1day/'} />}
+              render={() => (
+                <QuestionOnTheMainContainer api={'api/questions/all/'} />
+              )}
             />
             <Route
               path="/bestofweek"
-              render={() => <TextApi api={'api/questions/bestof7day/'} />}
+              render={() => (
+                <QuestionOnTheMainContainer api={'api/questions/all/'} />
+              )}
             />
             <Route
               path="/bestofmonth"
-              render={() => <TextApi api={'api/questions/bestofmonth/'} />}
+              render={() => (
+                <QuestionOnTheMainContainer api={'api/questions/all/'} />
+              )}
             />
             <Route
               path="/bestofyear"
-              render={() => <TextApi api={'api/questions/bestofyear/'} />}
-            />
-            {/*            <Route
-              path="/redux"
               render={() => (
-                <NativeQuestionApiComponent api={'api/questions/bestofyear/'} />
+                <QuestionOnTheMainContainer api={'api/questions/all/'} />
               )}
-            />*/}
+            />
           </div>
         </Container>
       </React.Fragment>

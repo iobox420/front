@@ -2,12 +2,16 @@ import { connect } from 'react-redux'
 import QuestionSingleApiComponent from './QuestionSingleApiComponent'
 import {
   addCommentButtonSingleQuestionReducerAC,
+  countReducerAC,
   getSinglePostThunk,
   onChangeAddCommentTextFieldAC,
+  putLikeCommentThunk,
   putLikeThunk,
   selectQuestionAC,
   sendCommentThunk,
+  SingleQuestionAddCommentOnReplyTextFieldAC,
 } from '../../redux/questionPageReducer'
+import { commentReducerAC } from '../../redux/commentReducer'
 
 let mapStateToProps = (state) => {
   return {
@@ -20,28 +24,43 @@ let mapStateToProps = (state) => {
     showTextFieldState: state.addCommentButtonSingleQuestion,
     onChangeAddCommentTextField: state.onChangeAddCommentTextField,
     token: state.authorization.token,
+    isLikeQ: state.questionSinglePage.post,
+    isLikeR: state.questionSinglePage.reply,
+    count: state.count,
+    SingleQuestionAddCommentOnReplyTextField:
+      state.SingleQuestionAddCommentOnReplyTextField,
+    commentTextField: state.comment,
   }
 }
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    updateSinglePostsThunk: (uri) => {
-      dispatch(getSinglePostThunk(uri))
+    updateSinglePostsThunk: () => {
+      dispatch(getSinglePostThunk())
     },
     showTextField: (bool) => {
       dispatch(addCommentButtonSingleQuestionReducerAC(bool))
     },
-    onChangeAddCommentTextFieldFunc: (text) => {
-      dispatch(onChangeAddCommentTextFieldAC(text))
+    onChangeAddCommentTextFieldFunc: (text, id) => {
+      dispatch(onChangeAddCommentTextFieldAC(text, id))
     },
-    sendCommentThunk: (textcom, selectedQ, token) => {
-      dispatch(sendCommentThunk(textcom, selectedQ, token))
+    sendCommentThunk: (text, id, type) => {
+      dispatch(sendCommentThunk(text, id, type))
     },
     selectQuestion: (selectedQuestion) => {
       dispatch(selectQuestionAC(selectedQuestion))
     },
     putLike: (id, type) => {
       dispatch(putLikeThunk(id, type))
+    },
+    countReducerAC: () => {
+      dispatch(countReducerAC())
+    },
+    storeTextFieldAdd: (text, id) => {
+      dispatch(commentReducerAC(text, id))
+    },
+    putLikeComment: (id, stateLike) => {
+      dispatch(putLikeCommentThunk(id, stateLike))
     },
   }
 }

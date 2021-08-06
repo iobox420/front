@@ -1,3 +1,5 @@
+import { getSinglePostThunk } from './questionPageReducer'
+
 const UPDATE_POSTS = 'UPDATE-POSTS'
 const CLEAR_MAIN_PAGE_POSTS = 'CLEAR-MAIN-PAGE-POSTS'
 const LOADING_ERROR = 'LOADING-ERROR'
@@ -55,20 +57,41 @@ export const updatePostsMainPage = (data) => ({
 })
 
 export const getPostThunk = () => {
-  return (dispatch) => {
+  return (dispatch, getState) => {
+    let state = getState()
     dispatch(clearMainPagePosts)
     dispatch(loadingInProgress(false))
-    fetch('http://localhost:4000/api/questions/all/1')
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          dispatch(loadingInProgress(true))
-          dispatch(updatePostsMainPage(result))
+    if (state.authorization.isAuth) {
+      fetch('http://localhost:4000/api/questionswithauth/all/1', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: state.authorization.token,
         },
-        (error) => {
-          dispatch(loadingErrorAC(true))
-        }
-      )
+      })
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            dispatch(loadingInProgress(true))
+            dispatch(updatePostsMainPage(result))
+          },
+          (error) => {
+            dispatch(loadingErrorAC(true))
+          }
+        )
+    } else {
+      fetch('http://localhost:4000/api/questions/all/1')
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            dispatch(loadingInProgress(true))
+            dispatch(updatePostsMainPage(result))
+          },
+          (error) => {
+            dispatch(loadingErrorAC(true))
+          }
+        )
+    }
   }
 }
 
@@ -108,3 +131,50 @@ export const loadingSuccess = (repos) => ({
   type: 'LOADING-SUCCESS',
   repos,
 })
+
+export const putLikeQuestionOnMainThunk = (id, stateLike) => {
+  return (dispatch, getState) => {
+    let state = getState()
+
+    if (!state.authorization.isAuth) {
+      alert('Прежде чем поставить лайк, вам необходимо пройти авторизацию')
+    } else if (stateLike == null) {
+      let uri = `http://localhost:4000/api/questions/questions_posts/like/question/${id}`
+
+      fetch(uri, {
+        method: 'POST',
+        headers: {
+          Authorization: state.authorization.token,
+        },
+      })
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            dispatch(getPostThunk())
+          },
+          (error) => {
+            console.warn(error)
+          }
+        )
+    }
+    if (stateLike !== null) {
+      let uri = `http://localhost:4000/api/questions/questions_posts/removelike/question/${id}`
+
+      fetch(uri, {
+        method: 'POST',
+        headers: {
+          Authorization: state.authorization.token,
+        },
+      })
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            dispatch(getPostThunk())
+          },
+          (error) => {
+            console.warn(error)
+          }
+        )
+    }
+  }
+}

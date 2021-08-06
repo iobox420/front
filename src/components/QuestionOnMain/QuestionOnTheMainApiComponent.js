@@ -1,9 +1,8 @@
 import React from 'react'
 import QuestionOnTheMain from './QuestionOnTheMain'
 import { makeStyles } from '@material-ui/core/styles'
-import store from '../../redux/redux-store'
+import date from 'date-and-time'
 
-const { useState } = require('react')
 const { useEffect } = require('react')
 
 const useStyles = makeStyles({
@@ -17,8 +16,9 @@ function QuestionOnTheMainApiComponent({
   posts,
   isLoading,
   loadingError,
-  isLoadingCHE,
+
   selectQuestion,
+  putLikeQuestionOnMain,
 }) {
   const c = useStyles()
   // Примечание: пустой массив зависимостей [] означает, что
@@ -39,6 +39,7 @@ function QuestionOnTheMainApiComponent({
         {posts.map((currentPost, index, arr) => {
           return (
             <QuestionOnTheMain
+              putLikeQuestionOnMain={putLikeQuestionOnMain}
               key={index}
               props={currentPost}
               selectQuestion={selectQuestion}

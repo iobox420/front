@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getPostThunk } from './QuestionOnTheMainReducer'
 
 const UPDATE_CURRENT_POST = 'UPDATE-CURRENT-POST'
 const LOADING_SINGLE_QUESTION_IN_PROGRESS =
@@ -16,15 +17,38 @@ const SELECT_QUESTION = 'SELECT-QUESTION'
 const QUESTION = 'QUESTION'
 const REPLY = 'REPLY'
 
+const UPDATE_LIKE = 'UPDATE-LIKE'
+
+const INKREMENT = 'INKREMENT'
+
+const ON_CHANGE_TEXT_BOX_FIELD_COMMENT = 'ON-CHANGE-TEXT-BOX-FIELD-COMMENT'
+
 let initialState = {
   post: [],
   reply: [],
 }
 
+let init = ''
+
+export const countReducer = (state, action) => {
+  switch (action.type) {
+    case INKREMENT:
+      let result = state + 1
+      return {
+        result,
+      }
+    default:
+      return 0
+  }
+}
+
+export const countReducerAC = () => ({
+  type: INKREMENT,
+})
+
 const SingleQuestionPageReducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_CURRENT_POST:
-      debugger
       return {
         ...state,
         post: action.data.post,
@@ -47,21 +71,79 @@ export const updateQuestionPage = (data) => ({
   data: data,
 })
 
-export const getSinglePostThunk = (uri) => {
+export const getSinglePostThunk = () => {
+  return (dispatch, getState) => {
+    let state = getState()
+    let uri = document.location.href
+    let argument = String(uri).split('/')
+    if (state.authorization.isAuth) {
+      /*dispatch(clearSingleQuestionPosts)*/
+      dispatch(selectQuestionAC(argument[4]))
+      dispatch(loadingSingleQuestion(false))
+
+      fetch(
+        'http://localhost:4000/api/questions/questions_posts_with_auth/' +
+          argument[4],
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: state.authorization.token,
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            dispatch(loadingSingleQuestion(true))
+            dispatch(updateQuestionPage(result))
+          },
+          (error) => {
+            dispatch(loadingSingleQuestionErrorAC(true))
+          }
+        )
+    }
+    if (!state.authorization.isAuth) {
+      /*dispatch(clearSingleQuestionPosts)*/
+      dispatch(selectQuestionAC(argument[4]))
+      dispatch(loadingSingleQuestion(false))
+      fetch(
+        'http://localhost:4000/api/questions/questions_posts/' + argument[4]
+      )
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            dispatch(loadingSingleQuestion(true))
+            dispatch(updateQuestionPage(result))
+          },
+          (error) => {
+            dispatch(loadingSingleQuestionErrorAC(true))
+          }
+        )
+    }
+  }
+}
+
+export const updateQuestionPageLike = (data) => ({
+  type: UPDATE_LIKE,
+  data: data,
+})
+
+export const getSinglePostThunkSimple = () => {
   return (dispatch) => {
-    /*dispatch(clearSingleQuestionPosts)*/
+    let uri = document.location.href
     let argument = String(uri).split('/')
     dispatch(selectQuestionAC(argument[4]))
-    dispatch(loadingSingleQuestion(false))
+    /*dispatch(loadingSingleQuestion(false))*/
     fetch('http://localhost:4000/api/questions/questions_posts/' + argument[4])
       .then((res) => res.json())
       .then(
         (result) => {
-          dispatch(loadingSingleQuestion(true))
+          /*dispatch(loadingSingleQuestion(true))*/
           dispatch(updateQuestionPage(result))
         },
         (error) => {
-          dispatch(loadingSingleQuestionErrorAC(true))
+          /*dispatch(loadingSingleQuestionErrorAC(true))*/
         }
       )
   }
@@ -116,15 +198,21 @@ export const addCommentButtonSingleQuestionReducer = (
   }
 }
 
-export const onChangeAddCommentTextFieldAC = (text) => ({
+export const onChangeAddCommentTextFieldAC = (text, id) => ({
   type: ON_CHANGE_TEXT_BOX_FIELD,
   text: text,
+  id: id,
 })
 
 export const onChangeAddCommentTextFieldReducer = (state = '', action) => {
   switch (action.type) {
     case ON_CHANGE_TEXT_BOX_FIELD:
-      return action.text
+      let rt = {
+        ...state,
+        id: action.id,
+        text: action.text,
+      }
+      return rt
     default:
       return state
   }
@@ -159,67 +247,207 @@ export const selectQuestionReducer = (state = null, action) => {
   }
 }
 
-export const sendCommentThunk = (textcom, selectedQ, token) => {
-  debugger
+export const sendCommentThunk = (text, id, type) => {
   return (dispatch, getState) => {
     let state = getState()
-    let itgo = null
 
-    fetch(
-      `http://localhost:4000/api/questions/questions_posts/add/${selectedQ}/${textcom}`,
-      {
-        method: 'POST',
-        headers: {
-          Authorization: token,
-        },
+    if (state.authorization.isAuth === false) {
+      alert('Только авторизованные пользователя могут оставлять комментарии')
+    } else {
+      if (type === 'COMMENT-ON-REPLY') {
+        fetch(
+          `http://localhost:4000/api/questions/questions_posts/add_comment_on_reply/${id}/${text}`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: state.authorization.token,
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then(
+            (result) => {
+              dispatch(getSinglePostThunk())
+            },
+            (error) => {
+              alert(error)
+            }
+          )
       }
-    )
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          let kostyl = `////${selectedQ}`
-          dispatch(getSinglePostThunk(kostyl))
-        },
-        (error) => {
-          alert(error)
-        }
-      )
+      if (type === 'REPLY-ON-QUESTION') {
+        fetch(
+          `http://localhost:4000/api/questions/questions_posts/add/${id}/${text}`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: state.authorization.token,
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then(
+            (result) => {
+              dispatch(getSinglePostThunk())
+            },
+            (error) => {
+              alert(error)
+            }
+          )
+      }
+    }
   }
 }
 
 export const putLikeThunk = (id, type) => {
   return (dispatch, getState) => {
     let state = getState()
-    let uri = null
-    debugger
+    let uri = 'null'
 
-    if (type == QUESTION) {
-      uri = `http://localhost:4000/api/questions/questions_posts/like/question/${id}`
-    }
-    if (type == REPLY) {
-      uri = `http://localhost:4000/api/questions/questions_posts/like/reply/${id}`
-    }
-
-    debugger
-    fetch(uri, {
-      method: 'POST',
-      headers: {
-        Authorization: state.authorization.token,
-      },
-    })
-      .then((res) => res.json())
-      .then(
-        (result) => {
-          debugger
-          let kostyl = `////${state.selectedQuestion}`
-          console.warn(kostyl)
-          dispatch(getSinglePostThunk(kostyl))
-        },
-        (error) => {
-          debugger
-          console.warn(error)
+    if (state.authorization.isAuth) {
+      let arr = state.questionSinglePage.reply
+      let res = null
+      let index = null
+      res = arr.find((el, i, arr) => {
+        if (el._id_reply === id) {
+          index = i
+          return true
         }
-      )
+      })
+      console.log(res, index)
+
+      if (
+        type == QUESTION &&
+        state.questionSinglePage.post[0].isLike === null
+      ) {
+        uri = `http://localhost:4000/api/questions/questions_posts/like/question/${id}`
+        fetch(uri, {
+          method: 'POST',
+          headers: {
+            Authorization: state.authorization.token,
+          },
+        })
+          .then((res) => res.json())
+          .then(
+            (result) => {
+              dispatch(getSinglePostThunk())
+            },
+            (error) => {
+              console.warn(error)
+            }
+          )
+      }
+
+      if (
+        type == REPLY &&
+        state.questionSinglePage.reply[index].isLike === null
+      ) {
+        uri = `http://localhost:4000/api/questions/questions_posts/like/reply/${id}`
+        fetch(uri, {
+          method: 'POST',
+          headers: {
+            Authorization: state.authorization.token,
+          },
+        })
+          .then((res) => res.json())
+          .then(
+            (result) => {
+              dispatch(getSinglePostThunk())
+            },
+            (error) => {
+              console.warn(error)
+            }
+          )
+      }
+      if (
+        type == REPLY &&
+        state.questionSinglePage.reply[index].isLike != null
+      ) {
+        fetch(
+          `http://localhost:4000/api/questions/questions_posts/removelike/reply/${id}`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: state.authorization.token,
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then(
+            (result) => {
+              dispatch(getSinglePostThunk())
+            },
+            (error) => {
+              console.warn(error)
+            }
+          )
+      }
+      if (type == QUESTION && state.questionSinglePage.post[0].isLike != null) {
+        fetch(
+          `http://localhost:4000/api/questions/questions_posts/removelike/question/${id}`,
+          {
+            method: 'POST',
+            headers: {
+              Authorization: state.authorization.token,
+            },
+          }
+        )
+          .then((res) => res.json())
+          .then(
+            (result) => {
+              dispatch(getSinglePostThunk())
+            },
+            (error) => {
+              console.warn(error)
+            }
+          )
+      }
+    } else {
+      alert('Прежде чем поставить лайк, вам необходимо пройти авторизацию')
+    }
+  }
+}
+export const putLikeCommentThunk = (id, stateLike) => {
+  return (dispatch, getState) => {
+    let state = getState()
+
+    if (!state.authorization.isAuth) {
+      alert('Прежде чем поставить лайк, вам необходимо пройти авторизацию')
+    } else if (stateLike == null) {
+      let uri = `http://localhost:4000/api/questions/questions_posts/like/comment/${id}`
+      fetch(uri, {
+        method: 'POST',
+        headers: {
+          Authorization: state.authorization.token,
+        },
+      })
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            dispatch(getSinglePostThunk())
+          },
+          (error) => {
+            console.warn(error)
+          }
+        )
+    }
+    if (stateLike !== null) {
+      let uri = `http://localhost:4000/api/questions/questions_posts/removelike/comment/${id}`
+      fetch(uri, {
+        method: 'POST',
+        headers: {
+          Authorization: state.authorization.token,
+        },
+      })
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            dispatch(getSinglePostThunk())
+          },
+          (error) => {
+            console.warn(error)
+          }
+        )
+    }
   }
 }
 

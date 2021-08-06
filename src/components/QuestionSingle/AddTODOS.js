@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 import { makeStyles } from '@material-ui/core/styles'
@@ -18,23 +18,19 @@ const useStyles = makeStyles({
   },
 })
 
-const AddComment = (props) => {
-  const [textFieldState, setTextFieldState] = useState('')
+const AddCommentTODOS = (props) => {
   const c = useStyles()
   let text = ''
   return (
     <form noValidate autoComplete="off" className={c.addCommentForm}>
       <TextField
-        id={props.id}
+        id={props.number}
         label="Outlined"
         variant="outlined"
         className={c.textField}
-        /*value={props.onChangeAddCommentTextField}*/
         onChange={(e) => {
-          setTextFieldState(e.target.value)
-
-          /*          text = e.target.value
-          props.storeTextFieldAdd(text, props.id)*/
+          text = e.target.value
+          console.log(text)
         }}
       />
       <Button
@@ -42,15 +38,14 @@ const AddComment = (props) => {
         color="primary"
         className={c.button}
         onClick={() => {
-          if (props.token === undefined) {
-            alert('you are not authorized')
-          }
-          props.sendCommentThunk(textFieldState, props.idForSend, props.type)
+          debugger
+          console.log('cl')
+          props.storeTextFieldAdd(text, props.number)
         }}
       >
-        Send
+        Add
       </Button>
     </form>
   )
 }
-export default AddComment
+export default AddCommentTODOS

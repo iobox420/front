@@ -1,10 +1,5 @@
 import React from 'react'
-import { Route } from 'react-router-dom'
-import { Home } from './Home'
-import { Login } from './Login'
-import { Secret } from './Secret'
 import MainPageContainer from './components/MainPageContainer'
-import Test from './components/Test'
 
 const App = (props) => {
   return <MainPageContainer store={props.store} />
