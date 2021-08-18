@@ -101,7 +101,7 @@ const useStyles = makeStyles({
     lineHeight: 1.58,
     fontSize: '14px',
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    color: '#056fd2',
+    color: '#a0a1a2',
     fontStyle: 'normal',
     fontWeight: 'bold',
   },
@@ -183,7 +183,7 @@ export default function QuestionSingle(props) {
             }
           }}
         >
-          more...
+          {/* prettier-ignore */} читать далее...
         </em>
       ) : null}
     </div>
@@ -196,7 +196,7 @@ export default function QuestionSingle(props) {
   return (
     <div className={c.questionWrapper}>
       <div className={c.lineOneTagsAndData}>
-        <div className={c.questionTagsBlock}>TAGS MATH CALCULUS MATHEMATIC</div>
+        {/*<div className={c.questionTagsBlock}>TAGS MATH CALCULUS MATHEMATIC</div>*/}
       </div>
 
       <div className={c.lineTwoAndThreeQuestionTextBlock}>
@@ -256,7 +256,7 @@ export default function QuestionSingle(props) {
               />
             </svg>
           </div>
-          <div className={c.addCommentLabel}>Add comment</div>
+          <div className={c.addCommentLabel}>Ответить</div>
         </button>
       </div>
       {props.textFieldState ? (

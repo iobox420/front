@@ -38,7 +38,6 @@ const AddCommentTODOS = (props) => {
         color="primary"
         className={c.button}
         onClick={() => {
-          debugger
           console.log('cl')
           props.storeTextFieldAdd(text, props.number)
         }}

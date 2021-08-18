@@ -44,7 +44,7 @@ const MainPage = (props) => {
             <Route
               path="/bestofday"
               render={() => (
-                <QuestionOnTheMainContainer api={'api/questions/all/'} />
+                <QuestionOnTheMainContainer api={'api/questions/bestof1day/'} />
               )}
             />
             <Route

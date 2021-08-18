@@ -24,6 +24,11 @@ const INKREMENT = 'INKREMENT'
 
 const ON_CHANGE_TEXT_BOX_FIELD_COMMENT = 'ON-CHANGE-TEXT-BOX-FIELD-COMMENT'
 
+const UPDATE_CURRENT_POST_NECESSARY = 'UPDATE-CURRENT-POST-NECESSARY'
+
+const UPDATE_CURRENT_POST_NECESSARY_COMMENT =
+  'UPDATE-CURRENT-POST-NECESSARY-COMMENT'
+
 let initialState = {
   post: [],
   reply: [],
@@ -55,6 +60,29 @@ const SingleQuestionPageReducer = (state = initialState, action) => {
         post: action.data.post,
         reply: action.data.reply,
       }
+    case UPDATE_CURRENT_POST_NECESSARY: // action: data, action: i
+      debugger
+      let last = action.data.reply.length - 1
+      let newReply = action.data.reply[last]
+      return {
+        ...state,
+        reply: [...state.reply, newReply],
+      }
+    case UPDATE_CURRENT_POST_NECESSARY_COMMENT: // action: data, action: i
+      debugger
+      /*let l = */
+      let lastC = action.data.reply[action.i].comments.length - 1
+      let newComment = action.data.reply[action.i].comments[lastC]
+      debugger
+      let stateR = [...state.reply]
+      stateR[action.i].comments = [
+        ...state.reply[action.i].comments,
+        newComment,
+      ]
+      return {
+        ...state,
+        reply: stateR,
+      }
     case CLEAR_SINGLE_QUESTION:
       return {
         ...state,
@@ -70,6 +98,18 @@ const SingleQuestionPageReducer = (state = initialState, action) => {
 export const updateQuestionPage = (data) => ({
   type: UPDATE_CURRENT_POST,
   data: data,
+})
+
+export const updateQuestionPageNecessary = (data, i) => ({
+  type: UPDATE_CURRENT_POST_NECESSARY,
+  data: data,
+  i: i,
+})
+
+export const updateQuestionPageNecessaryComment = (data, i) => ({
+  type: UPDATE_CURRENT_POST_NECESSARY_COMMENT,
+  data: data,
+  i: i,
 })
 
 export const getSinglePostThunk = () => {
@@ -246,7 +286,7 @@ export const selectQuestionReducer = (state = null, action) => {
   }
 }
 
-export const sendCommentThunk = (text, id, type) => {
+export const sendCommentThunk = (text, id, type, i) => {
   return (dispatch, getState) => {
     let state = getState()
 
@@ -266,7 +306,7 @@ export const sendCommentThunk = (text, id, type) => {
           .then((res) => res.json())
           .then(
             (result) => {
-              dispatch(getSinglePostThunk())
+              dispatch(getSinglePostThunkNecessaryComment(i))
             },
             (error) => {
               alert(error)
@@ -286,7 +326,7 @@ export const sendCommentThunk = (text, id, type) => {
           .then((res) => res.json())
           .then(
             (result) => {
-              dispatch(getSinglePostThunk())
+              dispatch(getSinglePostThunkNecessary())
             },
             (error) => {
               alert(error)
@@ -444,6 +484,108 @@ export const putLikeCommentThunk = (id, stateLike) => {
           },
           (error) => {
             console.warn(error)
+          }
+        )
+    }
+  }
+}
+
+export const getSinglePostThunkNecessary = (i) => {
+  return (dispatch, getState) => {
+    let state = getState()
+    let uri = document.location.href
+    let argument = String(uri).split('/')
+    if (state.authorization.isAuth) {
+      /*dispatch(clearSingleQuestionPosts)*/
+      dispatch(selectQuestionAC(argument[4]))
+      /*dispatch(loadingSingleQuestion(false))*/
+
+      fetch(
+        `http://${SERVER}/api/questions/questions_posts_with_auth/` +
+          argument[4],
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: state.authorization.token,
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            /*dispatch(loadingSingleQuestion(true))*/
+            dispatch(updateQuestionPageNecessary(result, i))
+          },
+          (error) => {
+            dispatch(loadingSingleQuestionErrorAC(true))
+          }
+        )
+    }
+    if (!state.authorization.isAuth) {
+      /*dispatch(clearSingleQuestionPosts)*/
+      dispatch(selectQuestionAC(argument[4]))
+      dispatch(loadingSingleQuestion(false))
+      fetch(`http://${SERVER}/api/questions/questions_posts/` + argument[4])
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            dispatch(loadingSingleQuestion(true))
+            dispatch(updateQuestionPage(result))
+          },
+          (error) => {
+            dispatch(loadingSingleQuestionErrorAC(true))
+          }
+        )
+    }
+  }
+}
+
+export const getSinglePostThunkNecessaryComment = (i) => {
+  return (dispatch, getState) => {
+    let state = getState()
+    let uri = document.location.href
+    let argument = String(uri).split('/')
+    if (state.authorization.isAuth) {
+      /*dispatch(clearSingleQuestionPosts)*/
+      dispatch(selectQuestionAC(argument[4]))
+      /*dispatch(loadingSingleQuestion(false))*/
+
+      fetch(
+        `http://${SERVER}/api/questions/questions_posts_with_auth/` +
+          argument[4],
+        {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: state.authorization.token,
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            /*dispatch(loadingSingleQuestion(true))*/
+            dispatch(updateQuestionPageNecessaryComment(result, i))
+          },
+          (error) => {
+            dispatch(loadingSingleQuestionErrorAC(true))
+          }
+        )
+    }
+    if (!state.authorization.isAuth) {
+      /*dispatch(clearSingleQuestionPosts)*/
+      dispatch(selectQuestionAC(argument[4]))
+      dispatch(loadingSingleQuestion(false))
+      fetch(`http://${SERVER}/api/questions/questions_posts/` + argument[4])
+        .then((res) => res.json())
+        .then(
+          (result) => {
+            dispatch(loadingSingleQuestion(true))
+            dispatch(updateQuestionPage(result))
+          },
+          (error) => {
+            dispatch(loadingSingleQuestionErrorAC(true))
           }
         )
     }

@@ -29,7 +29,7 @@ const AddComment = (props) => {
         label="Outlined"
         variant="outlined"
         className={c.textField}
-        /*value={props.onChangeAddCommentTextField}*/
+        value={textFieldState}
         onChange={(e) => {
           setTextFieldState(e.target.value)
 
@@ -45,7 +45,13 @@ const AddComment = (props) => {
           if (props.token === undefined) {
             alert('you are not authorized')
           }
-          props.sendCommentThunk(textFieldState, props.idForSend, props.type)
+          props.sendCommentThunk(
+            textFieldState,
+            props.idForSend,
+            props.type,
+            props.i
+          )
+          setTextFieldState('')
         }}
       >
         Send

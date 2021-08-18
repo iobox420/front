@@ -58,7 +58,7 @@ const useStyles = makeStyles({
     lineHeight: 1.58,
     fontSize: '14px',
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    color: '#056fd2',
+    color: '#a0a1a2',
     fontStyle: 'normal',
     fontWeight: 'bold',
   },
@@ -73,7 +73,7 @@ const Comment = (props) => {
   if (props.props.comment_text.length > 200) {
     mr = true
   }
-  debugger
+
   let text = props.props.comment_text.slice(0, 200)
 
   let left = (
@@ -84,11 +84,9 @@ const Comment = (props) => {
           className={c.questionText_More}
           onClick={() => {
             if (showText == true) {
-              debugger
               setShowText(false)
               console.log('setshowtext false ', showText)
             } else {
-              debugger
               console.log('mr false')
               mr = false
               setShowText(true)
@@ -97,7 +95,7 @@ const Comment = (props) => {
           }}
         >
           {' '}
-          more...
+          читать далее...
         </em>
       ) : null}
     </div>

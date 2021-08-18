@@ -107,7 +107,7 @@ const useStyles = makeStyles({
     lineHeight: 1.58,
     fontSize: '14px',
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    color: '#056fd2',
+    color: '#a0a1a2',
     fontStyle: 'normal',
     fontWeight: 'bold',
   },
@@ -171,7 +171,7 @@ export default function Reply(props) {
   if (props.props.reply_text.length > 200) {
     mr = true
   }
-  debugger
+
   let text = props.props.reply_text.slice(0, 200)
 
   let left = (
@@ -182,11 +182,9 @@ export default function Reply(props) {
           className={c.questionText_More}
           onClick={() => {
             if (showText == true) {
-              debugger
               setShowText(false)
               console.log('setshowtext false ', showText)
             } else {
-              debugger
               console.log('mr false')
               mr = false
               setShowText(true)
@@ -194,7 +192,7 @@ export default function Reply(props) {
             }
           }}
         >
-          more...
+          читать далее...
         </em>
       ) : null}
     </div>
@@ -218,7 +216,7 @@ export default function Reply(props) {
   return (
     <div className={c.questionWrapper}>
       <div className={c.lineOneTagsAndData}>
-        <div className={c.questionTagsBlock}>TAGS MATH CALCULUS MATHEMATIC</div>
+        {/*<div className={c.questionTagsBlock}>TAGS MATH CALCULUS MATHEMATIC</div>*/}
       </div>
       <div className={c.lineTwoAndThreeQuestionTextBlock}>
         <div className={c.avatarLine}>
@@ -285,7 +283,7 @@ export default function Reply(props) {
               />
             </svg>
           </div>
-          <div className={c.addCommentLabel}>Add comment</div>
+          <div className={c.addCommentLabel}>Ответить</div>
         </button>
       </div>
 
@@ -312,6 +310,7 @@ export default function Reply(props) {
           token={props.token}
           commentTextField={props.commentTextField}
           storeTextFieldAdd={props.storeTextFieldAdd}
+          i={props.i}
           id={'Add' + props.i}
           onChangeAddCommentTextField={props.onChangeAddCommentTextField}
           onChangeAddCommentTextFieldFunc={

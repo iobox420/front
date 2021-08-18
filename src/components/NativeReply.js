@@ -105,7 +105,7 @@ const useStyles = makeStyles({
     lineHeight: 1.58,
     fontSize: '14px',
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-    color: '#056fd2',
+    color: '#a0a1a2',
     fontStyle: 'normal',
     fontWeight: 'bold',
   },
@@ -235,7 +235,7 @@ export default function NativeReply(props) {
               />
             </svg>
           </div>
-          <div className={c.addCommentLabel}>Add comment</div>
+          <div className={c.addCommentLabel}>Ответить</div>
         </div>
       </div>
     </div>

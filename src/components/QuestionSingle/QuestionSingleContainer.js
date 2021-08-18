@@ -44,8 +44,8 @@ let mapDispatchToProps = (dispatch) => {
     onChangeAddCommentTextFieldFunc: (text, id) => {
       dispatch(onChangeAddCommentTextFieldAC(text, id))
     },
-    sendCommentThunk: (text, id, type) => {
-      dispatch(sendCommentThunk(text, id, type))
+    sendCommentThunk: (text, id, type, i) => {
+      dispatch(sendCommentThunk(text, id, type, i))
     },
     selectQuestion: (selectedQuestion) => {
       dispatch(selectQuestionAC(selectedQuestion))
