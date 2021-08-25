@@ -1,5 +1,9 @@
 import { connect } from 'react-redux'
-import { updatePostsMainPage } from '../redux/QuestionOnTheMainReducer'
+import {
+  currentUrlAC,
+  signUp,
+  updatePostsMainPage,
+} from '../redux/QuestionOnTheMainReducer'
 import MainPage from './MainPage'
 import { clearTokenAC, /*clearTokenAC,*/ tokenAC } from '../redux/tokenReducer'
 
@@ -19,6 +23,12 @@ let mapDispatchToProps = (dispatch) => {
     },
     clearTokenAC: () => {
       dispatch(clearTokenAC())
+    },
+    signUp: (dataUsers) => {
+      dispatch(signUp(dataUsers))
+    },
+    currentUrl: (url) => {
+      dispatch(currentUrlAC(url))
     },
   }
 }

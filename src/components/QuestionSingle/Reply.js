@@ -252,7 +252,7 @@ export default function Reply(props) {
             onClick={() => {
               console.log('click')
 
-              props.putLike(props.props._id_reply, 'REPLY')
+              props.putLike(props.props._id_reply, 'REPLY', props.props.i)
             }}
           >
             <LikeSVG isLike={props.isLikeR} />
@@ -289,9 +289,12 @@ export default function Reply(props) {
 
       {/*<div className={c.commentsAndAddComment}>*/}
       {props.props.comments.map((currentPost, index, arr) => {
+        debugger
         if (arr.length > 0) {
           return (
             <Comment
+              iReply={props.i}
+              iComment={index}
               key={index}
               props={currentPost}
               putLikeComment={props.putLikeComment}

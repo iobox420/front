@@ -14,6 +14,7 @@ import { applyMiddleware, combineReducers, compose, createStore } from 'redux'
 
 import thunk from 'redux-thunk'
 import questionOnTheMainReducer, {
+  currrentUrlReducer,
   loadingErrorReducer,
   loadingQuestionOnTheMainReducer,
 } from './QuestionOnTheMainReducer'
@@ -36,6 +37,8 @@ let reducers = combineReducers({
   addCommentButtonSingleQuestion: addCommentButtonSingleQuestionReducer,
   onChangeAddCommentTextField: onChangeAddCommentTextFieldReducer,
   sendCommentThunk: sendCommentThunkReducer,
+
+  currrentUrl: currrentUrlReducer,
 
   count: countReducer,
 

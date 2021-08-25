@@ -26,7 +26,7 @@ function QuestionOnTheMainApiComponent({
   // аналогично componentDidMount()
 
   useEffect(() => {
-    updatePostsThunk()
+    updatePostsThunk(window.location.pathname)
   }, [])
 
   if (loadingError) {

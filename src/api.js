@@ -15,8 +15,10 @@ export const login = (userName, password) => {
     if (res.status === 200) {
       return res.json().then((data) => {
         return data
+        console.log(data)
       })
     } else {
+      console.log(error)
       const error = new Error(res.error)
       throw error
     }

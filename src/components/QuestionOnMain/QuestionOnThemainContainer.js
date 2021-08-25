@@ -17,8 +17,8 @@ let mapStateToProps = (state) => {
 
 let mapDispatchToProps = (dispatch) => {
   return {
-    updatePostsThunk: () => {
-      dispatch(getPostThunk())
+    updatePostsThunk: (url) => {
+      dispatch(getPostThunk(url))
     },
     isLoadingCHE: (bool) => {
       dispatch(loadingInProgress(bool))

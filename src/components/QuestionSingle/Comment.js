@@ -130,7 +130,13 @@ const Comment = (props) => {
         <div
           className={c.likeBlock_LikeIcon}
           onClick={() => {
-            props.putLikeComment(props.props._id_comment, props.props.isLike)
+            debugger
+            props.putLikeComment(
+              props.props._id_comment,
+              props.props.isLike,
+              props.iReply,
+              props.iComment
+            )
           }}
         >
           <LikeSVG isLike={props.props.isLike} />

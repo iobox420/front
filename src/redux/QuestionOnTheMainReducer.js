@@ -1,9 +1,12 @@
 import { getSinglePostThunk } from './questionPageReducer'
 import { SERVER } from '../config'
+const server = process.env.REACT_APP_API_SERVER
 
 const UPDATE_POSTS = 'UPDATE-POSTS'
 const CLEAR_MAIN_PAGE_POSTS = 'CLEAR-MAIN-PAGE-POSTS'
 const LOADING_ERROR = 'LOADING-ERROR'
+
+const CURRENT_URL = 'CURRENT-URL'
 
 let initialState = {
   posts: [
@@ -57,13 +60,14 @@ export const updatePostsMainPage = (data) => ({
   data: data,
 })
 
-export const getPostThunk = () => {
+export const getPostThunk = (url) => {
   return (dispatch, getState) => {
     let state = getState()
     dispatch(clearMainPagePosts)
     dispatch(loadingInProgress(false))
+
     if (state.authorization.isAuth) {
-      fetch(`http://${SERVER}/api/questionswithauth/all/1`, {
+      fetch(`http://${SERVER}/api/questionswithauth${url}/1`, {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json',
@@ -81,7 +85,7 @@ export const getPostThunk = () => {
           }
         )
     } else {
-      fetch(`http://${SERVER}/api/questions/all/1`)
+      fetch(`http://${SERVER}/api/questions${url}/1`)
         .then((res) => res.json())
         .then(
           (result) => {
@@ -179,3 +183,44 @@ export const putLikeQuestionOnMainThunk = (id, stateLike) => {
     }
   }
 }
+
+export const signUp = (dataUsers) => {
+  return (dispatch, getState) => {
+    fetch(`${server}/api/signup`, {
+      method: 'POST',
+      body: JSON.stringify({
+        dataUsers,
+      }),
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + localStorage.getItem('token'),
+      },
+    })
+      .then((r) => {
+        return r.json()
+      })
+      .then((res) => {
+        console.log(res)
+        if (res.message === 'Регистрация успешно завершена') {
+          alert(res.message)
+        }
+        if (res.state === 'bad') {
+          alert(res.message)
+        }
+      })
+  }
+}
+
+export const currrentUrlReducer = (state = '', action) => {
+  switch (action.type) {
+    case CURRENT_URL:
+      return action.url
+    default:
+      return state
+  }
+}
+
+export const currentUrlAC = (url) => ({
+  type: CURRENT_URL,
+  url: url,
+})

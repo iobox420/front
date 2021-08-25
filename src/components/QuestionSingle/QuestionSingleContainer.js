@@ -50,8 +50,8 @@ let mapDispatchToProps = (dispatch) => {
     selectQuestion: (selectedQuestion) => {
       dispatch(selectQuestionAC(selectedQuestion))
     },
-    putLike: (id, type) => {
-      dispatch(putLikeThunk(id, type))
+    putLike: (id, type, index) => {
+      dispatch(putLikeThunk(id, type, index))
     },
     countReducerAC: () => {
       dispatch(countReducerAC())
@@ -59,8 +59,8 @@ let mapDispatchToProps = (dispatch) => {
     storeTextFieldAdd: (text, id) => {
       dispatch(commentReducerAC(text, id))
     },
-    putLikeComment: (id, stateLike) => {
-      dispatch(putLikeCommentThunk(id, stateLike))
+    putLikeComment: (id, stateLike, iReply, iComment) => {
+      dispatch(putLikeCommentThunk(id, stateLike, iReply, iComment))
     },
   }
 }
