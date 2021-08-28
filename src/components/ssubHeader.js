@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import CardActionArea from '@material-ui/core/CardActionArea'
 import Card from '@material-ui/core/Card'
@@ -10,17 +10,18 @@ const useStyles = makeStyles((theme) => ({
   mainRoot: {
     display: 'grid',
     gridGap: '10px',
-    gridTemplateAreas: '"ar1 ar2 ar3 ar4 ar5"',
+    gridTemplateAreas: '"ar1 ar2 ar3 ar4 ar5 ar6"',
+    margin: '1em 0 0 0',
   },
   root: {
     borderRadius: '0px',
-    margin: '10px 0px 10px 0px',
+    /* margin: '10px 0px 10px 0px',*/
     boxShadow:
       '4px 4px 10px -1px rgb(0 0 0 / 20%), -7px 4px 9px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%)',
   },
   card: {
     background: 'white',
-    padding: '0px 16px 0px 16px',
+    /*padding: '0px 16px 0px 16px',*/
   },
   Link: {
     textDecoration: 'none',
@@ -32,11 +33,31 @@ const useStyles = makeStyles((theme) => ({
   },
 }))
 
-export default function SubHeader() {
-  const c = useStyles()
+export default function SubHeader(props) {
+  const [QuestionHandle, setQuestionHandle] = useState('false')
 
+  const c = useStyles()
+  const questionAreaHandle = () => {
+    console.log('questionAreaHandle')
+    props.setShowTextBoxQuestionOnMainPage()
+  }
   return (
     <div className={c.mainRoot}>
+      <Card className={c.root}>
+        <CardActionArea className={c.card}>
+          <CardContent className={c.replyTopBlock}>
+            <Typography className={c.question} variant="h6" component="h2">
+              <div
+                onClick={() => {
+                  questionAreaHandle()
+                }}
+              >
+                Задать вопрос
+              </div>
+            </Typography>
+          </CardContent>
+        </CardActionArea>
+      </Card>
       <Card className={c.root}>
         <CardActionArea className={c.card}>
           <CardContent className={c.replyTopBlock}>

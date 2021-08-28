@@ -4,6 +4,7 @@ import {
   getPostThunk,
   loadingInProgress,
   putLikeQuestionOnMainThunk,
+  sendNewQuestionThunk,
 } from '../../redux/QuestionOnTheMainReducer'
 import { selectQuestionAC } from '../../redux/questionPageReducer'
 
@@ -12,6 +13,7 @@ let mapStateToProps = (state) => {
     posts: state.mainPage.posts,
     isLoading: state.loadingQuestionOnTheMain,
     loadingError: state.loadingError,
+    token: state.authorization.token,
   }
 }
 
@@ -26,8 +28,11 @@ let mapDispatchToProps = (dispatch) => {
     selectQuestion: (selectedQuestion) => {
       dispatch(selectQuestionAC(selectedQuestion))
     },
-    putLikeQuestionOnMain: (id, stateLike) => {
-      dispatch(putLikeQuestionOnMainThunk(id, stateLike))
+    putLikeQuestionOnMain: (id, stateLike, index) => {
+      dispatch(putLikeQuestionOnMainThunk(id, stateLike, index))
+    },
+    sendNewQuestion: (header, text) => {
+      dispatch(sendNewQuestionThunk(header, text))
     },
   }
 }

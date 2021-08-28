@@ -17,6 +17,7 @@ import questionOnTheMainReducer, {
   currrentUrlReducer,
   loadingErrorReducer,
   loadingQuestionOnTheMainReducer,
+  showTextBoxQuestionOnMainPageReducer,
 } from './QuestionOnTheMainReducer'
 import SingleQuestionPageReducer from './questionPageReducer'
 import commentReducer from './commentReducer'
@@ -43,6 +44,8 @@ let reducers = combineReducers({
   count: countReducer,
 
   comment: commentReducer,
+
+  showTextBoxQuestionOnMainPage: showTextBoxQuestionOnMainPageReducer,
 })
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose

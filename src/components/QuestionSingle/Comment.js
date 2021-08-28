@@ -130,7 +130,6 @@ const Comment = (props) => {
         <div
           className={c.likeBlock_LikeIcon}
           onClick={() => {
-            debugger
             props.putLikeComment(
               props.props._id_comment,
               props.props.isLike,

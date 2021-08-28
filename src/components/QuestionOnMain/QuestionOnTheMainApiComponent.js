@@ -2,6 +2,9 @@ import React from 'react'
 import QuestionOnTheMain from './QuestionOnTheMain'
 import { makeStyles } from '@material-ui/core/styles'
 import date from 'date-and-time'
+import AddCommentOnMain from '../addCommentOnMain/AddCommentOnMain'
+import Test from './Test'
+import QuestionHandle from '../ssubHeader'
 
 const { useEffect } = require('react')
 
@@ -16,9 +19,11 @@ function QuestionOnTheMainApiComponent({
   posts,
   isLoading,
   loadingError,
-
+  token,
   selectQuestion,
   putLikeQuestionOnMain,
+  showTextBoxQuestionOnMainPage,
+  sendNewQuestion,
 }) {
   const c = useStyles()
   // Примечание: пустой массив зависимостей [] означает, что
@@ -36,9 +41,14 @@ function QuestionOnTheMainApiComponent({
   } else {
     return (
       <div className={c.mainWrapper}>
+        {showTextBoxQuestionOnMainPage ? (
+          <AddCommentOnMain sendNewQuestion={sendNewQuestion} token={token} />
+        ) : null}
+
         {posts.map((currentPost, index, arr) => {
           return (
             <QuestionOnTheMain
+              index={index}
               putLikeQuestionOnMain={putLikeQuestionOnMain}
               key={index}
               props={currentPost}

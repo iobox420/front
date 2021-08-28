@@ -1,4 +1,8 @@
-import { getSinglePostThunk } from './questionPageReducer'
+import {
+  getSinglePostThunk,
+  updateQuestionComponentDisLike,
+  updateReplyLike,
+} from './questionPageReducer'
 import { SERVER } from '../config'
 const server = process.env.REACT_APP_API_SERVER
 
@@ -7,6 +11,9 @@ const CLEAR_MAIN_PAGE_POSTS = 'CLEAR-MAIN-PAGE-POSTS'
 const LOADING_ERROR = 'LOADING-ERROR'
 
 const CURRENT_URL = 'CURRENT-URL'
+
+const UPDATE_LIKE_COMPONENT_STATE_AFTER_LIKE = `UPDATE-LIKE-COMPONENT-STATE-AFTER-LIKE`
+const UPDATE_LIKE_COMPONENT_STATE_AFTER_DISLIKE = `UPDATE-LIKE-COMPONENT-STATE-AFTER-DISLIKE`
 
 let initialState = {
   posts: [
@@ -36,17 +43,50 @@ let initialState = {
   ],
 }
 
-const questionOnTheMainReducer = (state = initialState, action) => {
-  switch (action.type) {
+const questionOnTheMainReducer = (state = initialState, a) => {
+  switch (a.type) {
     case UPDATE_POSTS:
       return {
         ...state,
-        posts: action.data,
+        posts: a.data,
       }
     case CLEAR_MAIN_PAGE_POSTS:
       return {
         ...state,
         posts: [],
+      }
+    case UPDATE_LIKE_COMPONENT_STATE_AFTER_LIKE:
+      /* a.dateLike a.indexQuestion */
+      let newLikesCount =
+        state.posts[a.indexQuestion].question_post_likes_count + 1
+
+      return {
+        ...state,
+        posts: state.posts.slice(0, a.indexQuestion).concat(
+          {
+            ...state.posts[a.indexQuestion],
+            isLike: a.dateLike,
+            question_post_likes_count: newLikesCount,
+          },
+          state.posts.slice(a.indexQuestion + 1)
+        ),
+      }
+    case UPDATE_LIKE_COMPONENT_STATE_AFTER_DISLIKE:
+      /* a.dateLike a.indexQuestion */
+
+      let newLikesCount2 =
+        state.posts[a.indexQuestion].question_post_likes_count - 1
+
+      return {
+        ...state,
+        posts: state.posts.slice(0, a.indexQuestion).concat(
+          {
+            ...state.posts[a.indexQuestion],
+            isLike: a.dateLike,
+            question_post_likes_count: newLikesCount2,
+          },
+          state.posts.slice(a.indexQuestion + 1)
+        ),
       }
     default:
       return state
@@ -54,6 +94,17 @@ const questionOnTheMainReducer = (state = initialState, action) => {
   }
 }
 export default questionOnTheMainReducer
+
+const updateLikeComponentStateAfterLike = (dateLike, indexQuestion) => ({
+  type: UPDATE_LIKE_COMPONENT_STATE_AFTER_LIKE,
+  dateLike: dateLike,
+  indexQuestion: indexQuestion,
+})
+const updateLikeComponentStateAfterDisLike = (dateLike, indexQuestion) => ({
+  type: UPDATE_LIKE_COMPONENT_STATE_AFTER_DISLIKE,
+  dateLike: dateLike,
+  indexQuestion: indexQuestion,
+})
 
 export const updatePostsMainPage = (data) => ({
   type: UPDATE_POSTS,
@@ -137,7 +188,7 @@ export const loadingSuccess = (repos) => ({
   repos,
 })
 
-export const putLikeQuestionOnMainThunk = (id, stateLike) => {
+export const putLikeQuestionOnMainThunk = (id, stateLike, index) => {
   return (dispatch, getState) => {
     let state = getState()
 
@@ -155,7 +206,11 @@ export const putLikeQuestionOnMainThunk = (id, stateLike) => {
         .then((res) => res.json())
         .then(
           (result) => {
-            dispatch(getPostThunk())
+            if (result.message == 'like has been completed') {
+              dispatch(
+                updateLikeComponentStateAfterLike(result.dateLike, index)
+              )
+            }
           },
           (error) => {
             console.warn(error)
@@ -174,7 +229,9 @@ export const putLikeQuestionOnMainThunk = (id, stateLike) => {
         .then((res) => res.json())
         .then(
           (result) => {
-            dispatch(getPostThunk())
+            if (result.message == 'like has been removed') {
+              dispatch(updateLikeComponentStateAfterDisLike(null, index))
+            }
           },
           (error) => {
             console.warn(error)
@@ -224,3 +281,20 @@ export const currentUrlAC = (url) => ({
   type: CURRENT_URL,
   url: url,
 })
+
+export const showTextBoxQuestionOnMainPageAC = () => ({
+  type: 'UPDATE_TEXT_BOX_SHOW_STATE',
+})
+
+export const showTextBoxQuestionOnMainPageReducer = (state = false, action) => {
+  switch (action.type) {
+    case 'UPDATE_TEXT_BOX_SHOW_STATE':
+      return state ? false : true
+    default:
+      return state
+  }
+}
+
+export const sendNewQuestionThunk = (header, text) => {
+  return (dispatch, getState) => {}
+}

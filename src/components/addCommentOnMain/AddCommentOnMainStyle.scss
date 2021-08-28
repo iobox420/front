@@ -1,0 +1,22 @@
+.input {
+  outline: none;
+  height: 11em;
+  width: 100%;
+  border-radius: 4px;
+  border-style: solid;
+  border-width: 1px;
+  border-color: rgba(0, 0, 0, 0.23);
+  resize: none;
+  background: inherit;
+  padding: 18.5px 14px;
+  font-size: 1rem;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  font-weight: 400;
+  line-height: 1.1876em;
+  letter-spacing: 0.00938em;
+}
+
+.input:hover,
+.input:focus {
+  border: 1px solid #000000;
+}

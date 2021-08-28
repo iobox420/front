@@ -1,6 +1,8 @@
 import { connect } from 'react-redux'
 import {
   currentUrlAC,
+  sendNewQuestionThunk,
+  showTextBoxQuestionOnMainPageAC,
   signUp,
   updatePostsMainPage,
 } from '../redux/QuestionOnTheMainReducer'
@@ -11,6 +13,7 @@ let mapStateToProps = (state) => {
   return {
     state: state,
     token: state.authorization.token,
+    showTextBoxQuestionOnMainPage: state.showTextBoxQuestionOnMainPage,
   }
 }
 let mapDispatchToProps = (dispatch) => {
@@ -29,6 +32,9 @@ let mapDispatchToProps = (dispatch) => {
     },
     currentUrl: (url) => {
       dispatch(currentUrlAC(url))
+    },
+    setShowTextBoxQuestionOnMainPage: () => {
+      dispatch(showTextBoxQuestionOnMainPageAC())
     },
   }
 }

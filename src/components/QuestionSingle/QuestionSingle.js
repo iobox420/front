@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
-import AddComment from './AddComment'
+import AddComment from '../AddComment'
 import LikeSVG from './LikeSVG'
 import date from 'date-and-time'
 

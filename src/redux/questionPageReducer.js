@@ -97,7 +97,6 @@ const SingleQuestionPageReducer = (state = initialState, action) => {
       }
     //смена состояние значка лайка у компоненты QuestionSingle при нажатии лайка
     case UPDATE_CURRENT_POST_NECESSARY_LIKE: // action: data, action: i
-      debugger
       let newQuestionSingleLikesCount = state.post[0].question_likes_count + 1
       let dateLike3
       if (action.dateLike == undefined) {
@@ -117,7 +116,6 @@ const SingleQuestionPageReducer = (state = initialState, action) => {
       }
     //смена состояние значка лайка у компоненты QuestionSingle при нажатии лайка - дизлайк
     case UPDATE_CURRENT_POST_NECESSARY_DISLIKE: // action: data, action: i
-      debugger
       let newQuestionSingleLikesCount2 = state.post[0].question_likes_count - 1
       let dateLike2
       if (action.dateLike == undefined) {
@@ -138,54 +136,89 @@ const SingleQuestionPageReducer = (state = initialState, action) => {
     //смена состояние значка лайка у компоненты reply при нажатии лайка
     case UPDATE_CURRENT_REPLY_NECESSARY_LIKE:
       let newLikesCount = state.reply[action.index].reply_likes_count + 1
-      debugger
+
+      let test = state.reply
+        .slice(0, action.index)
+        .concat(
+          { ...state.reply[action.index], isLike: action.dateLike },
+          state.reply.slice(action.index + 1)
+        )
+
       return {
         ...state,
-        reply: [
+        reply: state.reply.slice(0, action.index).concat(
           {
             ...state.reply[action.index],
             isLike: action.dateLike,
             reply_likes_count: newLikesCount,
           },
-        ],
+          state.reply.slice(action.index + 1)
+        ),
       }
 
     //смена состояние значка лайка у компоненты reply при нажатии лайка - дизлайк
     case UPDATE_CURRENT_REPLY_NECESSARY_DISLIKE:
       let newLikesCount2 = state.reply[action.index].reply_likes_count - 1
-      debugger
+
       return {
         ...state,
-        reply: [
+        reply: state.reply.slice(0, action.index).concat(
           {
             ...state.reply[action.index],
-            isLike: action.dateLike,
+            isLike: null,
             reply_likes_count: newLikesCount2,
           },
-        ],
+          state.reply.slice(action.index + 1)
+        ),
       }
     //смена состояние значка лайка у компоненты comment при нажатии лайка
     case UPDATE_CURRENT_COMMENT_NECESSARY_LIKE:
-      debugger
-      let LikesCountLikeComment =
+      /*action.iReply action.iComment action.dateLike*/
+      let newCountLikes =
         state.reply[action.iReply].comments[action.iComment]
           .comments_likes_count + 1
-      let reply = [...state.reply]
-      let reply2 = state.reply
-      debugger
-      reply[action.iReply].comments[action.iComment].isLike = action.dateLike
-      reply[action.iReply].comments[action.iComment].comments_likes_count =
-        LikesCountLikeComment
-
       return {
         ...state,
-        reply: [reply],
+        reply: state.reply.slice(0, action.iReply).concat(
+          {
+            ...state.reply[action.iReply],
+            comments: state.reply[action.iReply].comments
+              .slice(0, action.iComment)
+              .concat(
+                {
+                  ...state.reply[action.iReply].comments[action.iComment],
+                  isLike: action.dateLike,
+                  comments_likes_count: newCountLikes,
+                },
+                state.reply[action.iReply].comments.slice(action.iComment + 1)
+              ),
+          },
+          state.reply.slice(action.iReply + 1)
+        ),
       }
-
     case UPDATE_CURRENT_COMMENT_NECESSARY_DISLIKE:
-      debugger
+      /*action.iReply action.iComment action.dateLike*/
+      let newCountLikes2 =
+        state.reply[action.iReply].comments[action.iComment]
+          .comments_likes_count - 1
       return {
         ...state,
+        reply: state.reply.slice(0, action.iReply).concat(
+          {
+            ...state.reply[action.iReply],
+            comments: state.reply[action.iReply].comments
+              .slice(0, action.iComment)
+              .concat(
+                {
+                  ...state.reply[action.iReply].comments[action.iComment],
+                  isLike: null,
+                  comments_likes_count: newCountLikes2,
+                },
+                state.reply[action.iReply].comments.slice(action.iComment + 1)
+              ),
+          },
+          state.reply.slice(action.iReply + 1)
+        ),
       }
 
     case CLEAR_SINGLE_QUESTION:
@@ -481,7 +514,6 @@ export const sendCommentThunk = (text, id, type, i) => {
 
 export const putLikeThunk = (id, type, index) => {
   return (dispatch, getState) => {
-    debugger
     let state = getState()
     let uri = 'null'
 
@@ -511,7 +543,6 @@ export const putLikeThunk = (id, type, index) => {
           .then((res) => res.json())
           .then(
             (result) => {
-              debugger
               if (result.message == 'like has been completed') {
                 dispatch(updateQuestionComponentLike(id, result.dateLike))
               }
@@ -538,7 +569,6 @@ export const putLikeThunk = (id, type, index) => {
           .then(
             (result) => {
               if (result.message == 'like has been completed') {
-                debugger
                 dispatch(updateReplyLike(index, result.dateLike))
               }
             },
@@ -600,7 +630,7 @@ export const putLikeThunk = (id, type, index) => {
 export const putLikeCommentThunk = (id, stateLike, iReply, iComment) => {
   return (dispatch, getState) => {
     let state = getState()
-    debugger
+
     if (!state.authorization.isAuth) {
       alert('Прежде чем поставить лайк, вам необходимо пройти авторизацию')
     } else if (stateLike == null) {
@@ -615,7 +645,6 @@ export const putLikeCommentThunk = (id, stateLike, iReply, iComment) => {
         .then(
           (result) => {
             if (result.message == 'like has been completed') {
-              debugger
               dispatch(
                 updateCommentComponentLike(iReply, iComment, result.dateLike)
               )
@@ -638,7 +667,6 @@ export const putLikeCommentThunk = (id, stateLike, iReply, iComment) => {
         .then(
           (result) => {
             if (result.message == 'like has been removed') {
-              debugger
               dispatch(
                 updateCommentComponentDisLike(iReply, iComment, result.dateLike)
               )

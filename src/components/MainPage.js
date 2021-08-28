@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CssBaseline from '@material-ui/core/CssBaseline'
 import Container from '@material-ui/core/Container'
 import Header from './Header'
@@ -6,7 +6,6 @@ import SubHeader from './ssubHeader'
 import { BrowserRouter, Route } from 'react-router-dom'
 import QuestionOnTheMainContainer from './QuestionOnMain/QuestionOnThemainContainer'
 import QuestionSingleContainer from './QuestionSingle/QuestionSingleContainer'
-import { SERVER } from '../config'
 
 const MainPage = (props) => {
   function RDM(min = 1, max = 10000) {
@@ -15,18 +14,6 @@ const MainPage = (props) => {
     return Math.floor(Math.random() * (max - min)) + min //Максимум не включается, минимум включается
   }
   document.title = RDM(1, 1000)
-
-  const handleClick = () => {
-    console.log('start fetch')
-    fetch(`http://${SERVER}/test/router`)
-      .then((res) => {
-        return res.json()
-      })
-      .then((r) => {
-        console.log('response received')
-        console.log(r)
-      })
-  }
 
   return (
     <BrowserRouter>
@@ -40,14 +27,13 @@ const MainPage = (props) => {
             clearTokenAC={props.clearTokenAC}
             signUp={props.signUp}
           />
-          <button
-            onClick={() => {
-              handleClick()
-            }}
-          >
-            fetch
-          </button>
-          <SubHeader />
+          <SubHeader
+            showTextBoxQuestionOnMainPage={props.showTextBoxQuestionOnMainPage}
+            setShowTextBoxQuestionOnMainPage={
+              props.setShowTextBoxQuestionOnMainPage
+            }
+          />
+
           <div className="app-wrapper-content">
             <Route
               exact
@@ -57,7 +43,15 @@ const MainPage = (props) => {
             <Route
               path="/all"
               render={() => (
-                <QuestionOnTheMainContainer api={'api/questions/all/'} />
+                <QuestionOnTheMainContainer
+                  showTextBoxQuestionOnMainPage={
+                    props.showTextBoxQuestionOnMainPage
+                  }
+                  setShowTextBoxQuestionOnMainPage={
+                    props.setShowTextBoxQuestionOnMainPage
+                  }
+                  api={'api/questions/all/'}
+                />
               )}
             />
             <Route

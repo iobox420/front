@@ -130,7 +130,25 @@ export default function QuestionOnTheMain(props) {
 
   const c = useStyles()
 
-  let dataCreate = date.format(new Date(props.props.date_create), 'YY/MM/DD')
+  let dateCreateDate = new Date(props.props.date_create)
+  let currentDate = new Date()
+
+  let dataCreate
+  /*Если прошло больше 24 часов то */
+  let dateToHours = date.subtract(currentDate, dateCreateDate).toHours()
+  if (dateToHours > 24) {
+    dataCreate = date.format(new Date(props.props.date_create), 'YY/MM/DD')
+  }
+  if (dateToHours < 24 && dateToHours > 1) {
+    dataCreate = `${Math.round(
+      date.subtract(new Date(), new Date(props.props.date_create)).toHours()
+    )} часа назад`
+  }
+  if (dateToHours < 1) {
+    dataCreate = `${Math.round(
+      date.subtract(new Date(), new Date(props.props.date_create)).toMinutes()
+    )} минут назад`
+  }
 
   let left = (
     <div className={c.questionText_Text}>
@@ -186,7 +204,8 @@ export default function QuestionOnTheMain(props) {
           onClick={() => {
             props.putLikeQuestionOnMain(
               props.props._id_post,
-              props.props.isLike
+              props.props.isLike,
+              props.index
             )
           }}
         >

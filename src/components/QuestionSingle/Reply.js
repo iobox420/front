@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { makeStyles } from '@material-ui/core/styles'
 import { NavLink } from 'react-router-dom'
 import LikeSVG from './LikeSVG'
-import AddComment from './AddComment'
+import AddComment from '../AddComment'
 import Comment from './Comment'
 import AvatarC from './AvatarC'
 import date from 'date-and-time'
@@ -289,7 +289,6 @@ export default function Reply(props) {
 
       {/*<div className={c.commentsAndAddComment}>*/}
       {props.props.comments.map((currentPost, index, arr) => {
-        debugger
         if (arr.length > 0) {
           return (
             <Comment
